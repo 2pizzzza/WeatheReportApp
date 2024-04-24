@@ -2,6 +2,7 @@ package com.example.wearherreport
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -18,18 +19,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 
+val API_KEY = "3626d7d560134f48935185758242404"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Greeting("Karakol")
+            Greeting("Karakol", this)
         }
     }
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Greeting(name: String, context: Context) {
     val state = remember {
         mutableStateOf("Unknown")
     }
@@ -54,7 +59,7 @@ fun Greeting(name: String) {
         ) {
             OutlinedButton(
                 onClick = {
-                    getResult(name, state,  context = Context)
+                    getResult(name, state, context)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,11 +72,24 @@ fun Greeting(name: String) {
 
 
 private fun getResult(city: String, state: MutableState<String>, context: Context) {
+    val url = "https://api.weatherapi.com/v1/current.json" +
+            "?key=$API_KEY&" +
+            "q=$city" +
+            "&aqi=no"
+    val queue = Volley.newRequestQueue(context)
 
-}
+    val stringRequest = StringRequest(
+        Request.Method.GET,
+        url,
+        {
+            response ->
+                        state.value = response
+        },
+        {
+            error->
+                Log.d("error ", "$error")
+        }
+    )
 
-@Preview(showSystemUi = true)
-@Composable
-fun greetinPreview() {
-    Greeting(name = "Karakol")
+    queue.add(stringRequest)
 }
