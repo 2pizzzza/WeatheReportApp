@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 
 val API_KEY = "3626d7d560134f48935185758242404"
 class MainActivity : ComponentActivity() {
@@ -49,7 +50,7 @@ fun Greeting(name: String, context: Context) {
                 .fillMaxHeight(0.5f)
                 .fillMaxWidth()
         ) {
-            Text(text = "Temp in $name \n ${state.value}")
+            Text(text = "Temp in $name \n ${state.value} C")
         }
         Box(
             contentAlignment = Alignment.BottomCenter,
@@ -83,7 +84,8 @@ private fun getResult(city: String, state: MutableState<String>, context: Contex
         url,
         {
             response ->
-                        state.value = response
+            val obj = JSONObject(response)
+            state.value = obj.getJSONObject("current").getString("temp_c")
         },
         {
             error->
