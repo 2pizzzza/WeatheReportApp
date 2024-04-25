@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -61,7 +63,7 @@ fun MainScreen() {
                     modifier = Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
-                ){
+                ) {
                     Text(
                         modifier = Modifier
                             .padding(top = 10.dp, start = 10.dp),
@@ -73,9 +75,55 @@ fun MainScreen() {
                     )
                     AsyncImage(
                         modifier = Modifier
-                            .size(35.dp),
+                            .size(35.dp)
+                            .padding(top = 8.dp, end = 10.dp),
                         model = "https://cdn.weatherapi.com/weather/64x64/day/353.png",
-                        contentDescription = "image")
+                        contentDescription = "image"
+                    )
+                }
+                Text(
+                    text = "Karakol",
+                    style = TextStyle(fontSize = 30.sp)
+                )
+                Text(
+                    text = "18°С",
+                    style = TextStyle(fontSize = 65.sp)
+                )
+                Text(
+                    text = "sunny",
+                    style = TextStyle(fontSize = 19.sp)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    IconButton(
+                        onClick = {
+                            /*TODO*/
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "search_image"
+                        )
+                    }
+                    Text(
+                        text = "18°C/35°C",
+                        modifier = Modifier
+                            .padding(top = 14.dp)
+                    )
+                    IconButton(
+                        onClick = {
+                            /*TODO*/
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_refresh),
+                            contentDescription = "search_image"
+                        )
+                    }
+
                 }
             }
         }
