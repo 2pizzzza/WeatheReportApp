@@ -23,15 +23,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.wearherreport.screens.MainScreen
 import org.json.JSONObject
 
-val API_KEY = "3626d7d560134f48935185758242404"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
+            MainScreen()
         }
     }
 }
