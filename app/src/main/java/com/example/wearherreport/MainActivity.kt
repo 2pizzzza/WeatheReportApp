@@ -31,76 +31,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Greeting(this)
-        }
-    }
-}
 
-@Composable
-fun Greeting(context: Context) {
-    val state = remember {
-        mutableStateOf("Unknown")
-    }
-
-    var city = remember {
-        mutableStateOf("Karakol")
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth()
-        ) {
-            Column {
-                Text(text = "Temp in ${city.value} \n ${state.value} C")
-                OutlinedTextField(
-                    value = city.value, onValueChange = { city.value = it }
-                )
-            }
-        }
-        Box(
-            contentAlignment = Alignment.BottomCenter,
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
-        ) {
-            OutlinedButton(
-                onClick = {
-                    getResult(city.value, state, context)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(text = "Refresh")
-            }
         }
     }
 }
 
 
-private fun getResult(city: String, state: MutableState<String>, context: Context) {
-    val url = "https://api.weatherapi.com/v1/current.json" +
-            "?key=$API_KEY&" +
-            "q=$city" +
-            "&aqi=no"
-    val queue = Volley.newRequestQueue(context)
-
-    val stringRequest = StringRequest(
-        Request.Method.GET,
-        url,
-        { response ->
-            val obj = JSONObject(response)
-            state.value = obj.getJSONObject("current").getString("temp_c")
-        },
-        { error ->
-            Log.d("error ", "$error")
-        }
-    )
-
-    queue.add(stringRequest)
-}
