@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,19 +26,24 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 
 val API_KEY = "3626d7d560134f48935185758242404"
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Greeting("Karakol", this)
+            Greeting(this)
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, context: Context) {
+fun Greeting(context: Context) {
     val state = remember {
         mutableStateOf("Unknown")
+    }
+
+    var city = remember {
+        mutableStateOf("Karakol")
     }
 
     Column(
@@ -50,7 +56,12 @@ fun Greeting(name: String, context: Context) {
                 .fillMaxHeight(0.5f)
                 .fillMaxWidth()
         ) {
-            Text(text = "Temp in $name \n ${state.value} C")
+            Column {
+                Text(text = "Temp in ${city.value} \n ${state.value} C")
+                OutlinedTextField(
+                    value = city.value, onValueChange = { city.value = it }
+                )
+            }
         }
         Box(
             contentAlignment = Alignment.BottomCenter,
@@ -60,7 +71,7 @@ fun Greeting(name: String, context: Context) {
         ) {
             OutlinedButton(
                 onClick = {
-                    getResult(name, state, context)
+                    getResult(city.value, state, context)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,14 +93,12 @@ private fun getResult(city: String, state: MutableState<String>, context: Contex
     val stringRequest = StringRequest(
         Request.Method.GET,
         url,
-        {
-            response ->
+        { response ->
             val obj = JSONObject(response)
             state.value = obj.getJSONObject("current").getString("temp_c")
         },
-        {
-            error->
-                Log.d("error ", "$error")
+        { error ->
+            Log.d("error ", "$error")
         }
     )
 
