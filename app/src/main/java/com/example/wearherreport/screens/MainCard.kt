@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -53,7 +54,8 @@ fun MainCard() {
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .background(Color.White),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
@@ -171,7 +173,13 @@ fun TabLayout() {
             modifier = Modifier
                 .weight(1.0f)
         ) { index ->
-
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(15){
+                    ListItem()
+                }
+            }
         }
     }
 }
