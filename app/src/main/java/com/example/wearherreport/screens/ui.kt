@@ -1,6 +1,7 @@
 package com.example.wearherreport.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +29,17 @@ import coil.compose.AsyncImage
 import com.example.wearherreport.response.WeatherModel
 
 @Composable
-fun ListItem(item: WeatherModel) {
+fun ListItem(item: WeatherModel, currentDay: MutableState<WeatherModel>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 5.dp)
+            .clickable {
+                if (item.hours.isEmpty())  return@clickable
+
+                currentDay.value = item
+
+            }
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
@@ -71,14 +78,14 @@ fun ListItem(item: WeatherModel) {
 }
 
 @Composable
-fun MainList(list:List<WeatherModel>, currentDays: MutableState<WeatherModel>){
+fun MainList(list:List<WeatherModel>, currentDay: MutableState<WeatherModel>){
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
         itemsIndexed(
             list
         ) { _, item ->
-            ListItem(item = item)
+            ListItem(item = item, currentDay)
         }
     }
 }

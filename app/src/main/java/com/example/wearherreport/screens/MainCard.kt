@@ -85,7 +85,13 @@ fun MainCard(currentDay: MutableState<WeatherModel>) {
                     style = TextStyle(fontSize = 30.sp)
                 )
                 Text(
-                    text = currentDay.value.currentTemp.toFloat().toInt().toString() + "°C",
+                    text = if (!currentDay.value.currentTemp.isEmpty()) {
+                        currentDay.value.currentTemp.toFloat().toInt().toString() + "°C"
+                    }else{
+                         currentDay.value.minTemp.toFloat().toInt().toString() +
+                        "°/${currentDay.value.maxTemp.toFloat().toInt()}°"
+                         }
+                    ,
                     style = TextStyle(fontSize = 65.sp)
                 )
                 Text(
@@ -180,7 +186,7 @@ fun TabLayout(daysList: MutableState<List<WeatherModel>>, currentDay: MutableSta
                 1 -> daysList.value
                 else -> daysList.value
             }
-            MainList(list = list, currentDays = currentDay)
+            MainList(list = list, currentDay = currentDay)
         }
     }
 }
