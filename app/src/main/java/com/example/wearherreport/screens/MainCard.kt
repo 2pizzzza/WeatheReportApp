@@ -1,16 +1,13 @@
 package com.example.wearherreport.screens
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,24 +24,24 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.wearherreport.R
 import com.example.wearherreport.response.WeatherModel
+import com.example.wearherreport.utils.getWeatherByHours
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 @Composable
-fun MainCard() {
+fun MainCard(currentDay: MutableState<WeatherModel>) {
     Column(
         modifier = Modifier
             .padding(5.dp, top = 10.dp)
@@ -69,7 +66,7 @@ fun MainCard() {
                     Text(
                         modifier = Modifier
                             .padding(top = 10.dp, start = 10.dp),
-                        text = "20 apr 2024 13:00",
+                        text = currentDay.value.time,
                         style = TextStyle(
                             fontSize = 13.sp,
                             color = Color.Black
@@ -79,20 +76,20 @@ fun MainCard() {
                         modifier = Modifier
                             .size(35.dp)
                             .padding(top = 8.dp, end = 10.dp),
-                        model = "https://cdn.weatherapi.com/weather/64x64/day/353.png",
+                        model = "https:${currentDay.value.icon}",
                         contentDescription = "image"
                     )
                 }
                 Text(
-                    text = "Karakol",
+                    text = currentDay.value.city,
                     style = TextStyle(fontSize = 30.sp)
                 )
                 Text(
-                    text = "18°С",
+                    text = currentDay.value.currentTemp.toFloat().toInt().toString() + "°C",
                     style = TextStyle(fontSize = 65.sp)
                 )
                 Text(
-                    text = "sunny",
+                    text = currentDay.value.condition,
                     style = TextStyle(fontSize = 19.sp)
                 )
                 Row(
@@ -111,7 +108,9 @@ fun MainCard() {
                         )
                     }
                     Text(
-                        text = "18°C/35°C",
+                        text = "${
+                            currentDay.value.minTemp.toFloat().toInt()
+                        }°/${currentDay.value.maxTemp.toFloat().toInt()}°",
                         modifier = Modifier
                             .padding(top = 14.dp)
                     )
@@ -134,7 +133,7 @@ fun MainCard() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>, currentDay: MutableState<WeatherModel>) {
 
     val tabList = listOf("HOURS", "DAYS ")
     val pagerState = rememberPagerState()
@@ -176,16 +175,14 @@ fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
             modifier = Modifier
                 .weight(1.0f)
         ) { index ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                itemsIndexed(
-                    daysList.value
-                ) { _, item ->
-                    ListItem(item = item)
-                }
+            val list = when (index) {
+                0 -> getWeatherByHours(currentDay.value.hours)
+                1 -> daysList.value
+                else -> daysList.value
             }
+            MainList(list = list, currentDays = currentDay)
         }
     }
 }
+
 
