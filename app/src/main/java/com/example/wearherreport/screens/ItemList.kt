@@ -49,7 +49,7 @@ fun ListItem(item: WeatherModel) {
             }
             Text(
                 text = item.currentTemp.ifEmpty {
-                    "${item.minTemp}°C/${item.maxTemp}°C"
+                    "${item.minTemp}°/${item.maxTemp}°"
                 },
                 modifier = Modifier,
                 style = TextStyle(fontSize = 25.sp)
