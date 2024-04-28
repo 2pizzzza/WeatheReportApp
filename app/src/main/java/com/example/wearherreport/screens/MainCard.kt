@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.wearherreport.R
+import com.example.wearherreport.response.WeatherModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
@@ -176,8 +178,15 @@ fun TabLayout() {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(15){
-                    ListItem()
+                itemsIndexed(
+                    listOf(
+                        WeatherModel("1", "12", "1", "sunny", "//cdn.weatherapi.com/weather/64x64/day/353.png", "12", "2", "12"),
+                        WeatherModel("2", "12", "", "sunny", "//cdn.weatherapi.com/weather/64x64/day/353.png", "12", "2", "12"),
+                        WeatherModel("3", "12", "2", "sunny", "//cdn.weatherapi.com/weather/64x64/day/353.png", "12", "2", "12"),
+                        WeatherModel("4", "12", "", "sunny", "//cdn.weatherapi.com/weather/64x64/day/353.png", "12", "2", "12"),
+                    )
+                ) { _, item ->
+                    ListItem(item = item)
                 }
             }
         }
@@ -187,7 +196,7 @@ fun TabLayout() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun PreviewMainScreen(){
+fun PreviewMainScreen() {
     Image(
         modifier = Modifier
             .fillMaxSize()

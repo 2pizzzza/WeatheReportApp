@@ -1,6 +1,5 @@
 package com.example.wearherreport.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,17 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.wearherreport.R
+import coil.compose.AsyncImage
+import com.example.wearherreport.response.WeatherModel
 
-@Preview
 @Composable
-fun ListItem() {
+fun ListItem(item: WeatherModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,22 +39,24 @@ fun ListItem() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.padding(start = 5.dp)) {
+            Column(modifier = Modifier.padding(start = 10.dp)) {
                 Text(
-                    text = "15:00",
+                    text = item.time,
                     modifier = Modifier.padding(bottom = 3.dp),
                     style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 )
-                Text(text = "Sunny")
+                Text(text = item.condition)
             }
             Text(
-                text = "25°С",
+                text = item.currentTemp.ifEmpty {
+                    "${item.minTemp}°C/${item.maxTemp}°C"
+                },
                 modifier = Modifier,
-                style = TextStyle(fontSize = 30.sp)
+                style = TextStyle(fontSize = 25.sp)
             )
-            Image(
+            AsyncImage(
                 contentScale = ContentScale.Crop,
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                model = "https:${item.icon}",
                 contentDescription = "image",
                 modifier = Modifier
                     .size(50.dp)
