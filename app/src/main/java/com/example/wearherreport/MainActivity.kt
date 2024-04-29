@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.wearherreport.response.WeatherModel
+import com.example.wearherreport.screens.DialogSearch
 import com.example.wearherreport.screens.MainCard
 import com.example.wearherreport.screens.TabLayout
 import com.example.wearherreport.utils.getData
@@ -26,6 +27,15 @@ class MainActivity : ComponentActivity() {
             val daysList = remember {
                 mutableStateOf(listOf<WeatherModel>())
             }
+
+            val dialogState = remember {
+                mutableStateOf(false)
+            }
+
+            val city = remember {
+                mutableStateOf("Karakol")
+            }
+
             val currentDay = remember {
                 mutableStateOf(
                     WeatherModel(
@@ -40,7 +50,13 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
-            getData("Karakol", daysList, currentDay, this)
+
+            if(dialogState.value){
+                DialogSearch(dialogState, city, onSubmit = {
+                    getData(it, daysList, currentDay, this)
+                })
+            }
+            getData(city.value, daysList, currentDay, this)
             Image(
                 modifier = Modifier
                     .fillMaxSize()
@@ -50,7 +66,13 @@ class MainActivity : ComponentActivity() {
                 contentDescription = "img"
             )
             Column {
-                MainCard(currentDay)
+                MainCard(currentDay, onClickSync = {
+                    getData(city.value, daysList, currentDay, this@MainActivity)
+                },
+                    onClickSearch = {
+                        dialogState.value = true
+                    }
+                )
                 TabLayout(daysList, currentDay)
             }
 
