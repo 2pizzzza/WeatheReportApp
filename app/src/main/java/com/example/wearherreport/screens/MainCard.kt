@@ -88,7 +88,7 @@ fun MainCard(currentDay: MutableState<WeatherModel>,
                     style = TextStyle(fontSize = 30.sp)
                 )
                 Text(
-                    text = if (!currentDay.value.currentTemp.isEmpty()) {
+                    text = if (currentDay.value.currentTemp.isNotEmpty()) {
                         currentDay.value.currentTemp.toFloat().toInt().toString() + "°C"
                     }else{
                          currentDay.value.minTemp.toFloat().toInt().toString() +

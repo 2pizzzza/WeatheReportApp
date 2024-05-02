@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
             }
 
             if(dialogState.value){
-                DialogSearch(dialogState, city, onSubmit = {
+                DialogSearch(dialogState,  onSubmit = {
                     getData(it, daysList, currentDay, this)
                 })
             }
